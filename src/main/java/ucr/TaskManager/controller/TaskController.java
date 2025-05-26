@@ -4,10 +4,6 @@ import org.springframework.web.bind.annotation.*;
 import ucr.TaskManager.model.Task;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import static java.lang.reflect.Array.get;
 
 @RestController
 @RequestMapping("/Task")
@@ -16,6 +12,9 @@ public class TaskController {
 
     public TaskController(ArrayList<Task> tasks) {
         this.tasks = new ArrayList<>();
+        //data:testers
+        this.tasks.add(new Task(1, "Proyecto dibujo ", "Realizar bitacora", "2025-05-31", "DIB0809", true));
+        this.tasks.add(new Task(2, "Proyecto Redes ", "Resolver Mapeo", "2025-05-31", "RDS0884", false));
     }
 
     // Add a new task
@@ -59,21 +58,35 @@ public class TaskController {
 
     // Get all completed tasks
     @GetMapping("/CompleteT")
-    public String getCompleteT(String state) {
-        for(Task t : tasks){
-          //  (if t == t.isCompleted()){
-                return "";
+    public ArrayList<Task> getCompleteT() {
+        ArrayList<Task> completeTasks = new ArrayList<>();
+        for (int taskPosition = 0; taskPosition < tasks.size(); taskPosition++) {
+            if (tasks.get(taskPosition).isComplete()) {
+                completeTasks.add(tasks.get(taskPosition));
             }
-       // }
-        return state;
+        }
+        return completeTasks;
     }
 
 
     // Get all tasks that still need to be completed
     @GetMapping("/IncompleteT")
-    public String getIncompleteT() {
-        return "";
+    public ArrayList<Task> getIncompleteT() {
+        //create a list for the filtered tasks
+        ArrayList<Task> incompleteTasks = new ArrayList<>();
+        //go through the main array in oreder to see every task state
+        for (int taskPosition = 0; taskPosition < tasks.size(); taskPosition++) {
+            //if the state that is on view  is not complete then add to the incompleteTasks the tasks that meet the requirement (being false)
+           // next line = add  tasks.get tasks position gets a specific task that meets the false state. the if decides, if an specific
+            //task is different of isComplete, this means , it is not complete, then it would take the specific task according to its position and add it to the arraylist
+            if (!tasks.get(taskPosition).isComplete()) {
+                incompleteTasks.add(tasks.get(taskPosition));
+            }
+        }
+        //then return the ones from the get and show the incomplete tasks
+        return incompleteTasks;
     }
+
 
     // Update task state
     @PatchMapping("/TaskStateUpd")
@@ -92,7 +105,7 @@ public class TaskController {
     @PutMapping("/TaskUpd")
     public String modTAttributes(Task task) {
         //verify that the task exists
-       // if()
+        // if()
         return "";
     }
 

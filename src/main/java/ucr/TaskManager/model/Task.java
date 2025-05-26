@@ -7,20 +7,20 @@ public class Task {
     private String description;
     private String dueDate;
     private String courseCode;
-    private boolean isCompleted;
+    private boolean isComplete;
 
     //empty constructor
     public Task() {
     }
 
     //constructor
-    public Task(int id, String title, String description, String dueDate, String courseCode, boolean isCompleted) {
+    public Task(int id, String title, String description, String dueDate, String courseCode, boolean isComplete) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.dueDate = dueDate;
         this.courseCode = courseCode;
-        this.isCompleted = isCompleted;
+        this.isComplete = isComplete;
     }
 
 
@@ -67,12 +67,12 @@ public class Task {
         this.courseCode = courseCode;
     }
 
-    public boolean isCompleted() {
-        return isCompleted;
+    public boolean isComplete() {
+        return isComplete;
     }
 
-    public void setCompleted(boolean completed) {
-        isCompleted = completed;
+    public void setComplete(boolean complete) {
+        isComplete = complete;
     }
 
     @Override
@@ -83,7 +83,6 @@ public class Task {
                 ", description='" + description + '\'' +
                 ", dueDate='" + dueDate + '\'' +
                 ", courseCode='" + courseCode + '\'' +
-                ", isCompleted=" + isCompleted +
                 '}';
     }
 }//class end
