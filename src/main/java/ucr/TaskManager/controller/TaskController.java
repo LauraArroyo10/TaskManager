@@ -23,13 +23,19 @@ public class TaskController {
         this.tasks.add(new Task(3, "Estudiar conceptos relacionados a \n" +
                 "Spring Boot  ", "Repasar la clase Controller, las \n" +
                 "anotaciones vistas en la clase y hacer \n" +
-                "las pruebas con Postman ", "“25-05-2025", "TM3100", false));
+                "las pruebas con Postman ", "“25-05-2025", "TM3100", true));
     }
     //___________________________________________________________________________________
-    // Add a new task
+    //1. Add a new task
     @PostMapping("/NewTask")
-    public String postT(@RequestBody Task t) {
-        tasks.add(t);
+    public String postT(@RequestBody Task task) {
+        for (Task t : tasks) {
+            if(t.getId() == task.getId()) {
+                return "Solo puede existeir una tarea con este id";
+
+            }
+        }
+        tasks.add(task);
         return "Se ha añadido con exito tu tarea";
     }
     //___________________________________________________________________________________
@@ -44,7 +50,7 @@ public class TaskController {
 //        return Collections.emptyList();
 //    }
 
-    // Get all tasks
+    //2. Get all tasks
     @GetMapping("/AllTasks")
     public ArrayList<Task> getAll() {
         if (!tasks.isEmpty()) {
@@ -53,7 +59,7 @@ public class TaskController {
         return new ArrayList<>();
     }
     //___________________________________________________________________________________
-    // Get a task by ID
+    // 3.Get a task by ID
     @GetMapping("/TaskById/{id}")
     public Task getById(@PathVariable int id) {
         //Task t----------> it refers to an individual tasks///tasks-----------> refers to the array
@@ -65,7 +71,7 @@ public class TaskController {
         return null;
     }
     //___________________________________________________________________________________
-    // Get all completed tasks
+    // 4.Get all completed tasks
     @GetMapping("/CompleteT")
     public ArrayList<Task> getCompleteT() {
         ArrayList<Task> completeTasks = new ArrayList<>();
@@ -120,10 +126,11 @@ public class TaskController {
 
     //___________________________________________________________________________________
     // Modify a specific attribute of the task
-    @PatchMapping("/TaskAttributeUpd")
+    @PatchMapping("/TaskAttributeUpd/{title}")
     public String modTAttribute(@RequestBody String title) {
-        if (!tasks.isEmpty()) {
-            for (Task t : tasks) {
+        if (tasks.isEmpty()) {
+            return "No se han podido encontrar tareas";}
+        for (Task t : tasks) {
                 if (t.getTitle().equals(title)) {
                     t.setTitle(title);
                     return "Titulo de tarea modificado";
@@ -131,8 +138,6 @@ public class TaskController {
             }
                     return "No se ha podido modificar el titulo";
                 }
-        return "No se han podido encontrar tareas";
-    }
 
     //___________________________________________________________________________________
 
@@ -140,31 +145,37 @@ public class TaskController {
 
 
     // Modify all attributes of the task
-    @PutMapping("/TaskUpd/{title}")
+    @PutMapping("/TaskUpd")
     public String modTAttributes(@RequestBody Task task) {
         //verify that the task exists
         for (Task t : tasks) {
+            //if the tasks that enters equals the object t in the array then do
             if (t.equals(task)) {
-                    if (t.getId()== (task.getId())){
+                //but first lets see if t id and task id are diferent if theyu are then lets change ir
+                if (t.getId() != (task.getId())) {
                     t.setId(task.getId());
-                } else {
+                } else {//if theya re the sam e then
                     return "Id de tarea ya existe";
-                    }
-                    t.setTitle(task.getTitle());
-                    t.setDescription(task.getDescription());
-                    t.setDueDate(task.getDueDate());
-                    t.setCourseCode(task.getCourseCode());
-                return "Tarea modificada!!!";
                 }
+                //and to continue with the code, the lines to change the attributes:
+                //in t lets change what we get in task
+                t.setTitle(task.getTitle());
+                t.setDescription(task.getDescription());
+                t.setDueDate(task.getDueDate());
+                t.setCourseCode(task.getCourseCode());
+                return "Tarea modificada!!!";
             }
-        return "No se pueden modificar tareas que noexisten";
+        }
+        return "No existe tal tarea";
     }
+
+
 
 
 //___________________________________________________________________________________
     // Delete a task by ID
     @DeleteMapping("/DelT/{id}")
-    public String delT(@PathVariable int id) {
+    public String deleteT(@PathVariable int id) {
         for (Task t : tasks) {
             if (id == t.getId()) {
                 tasks.remove(t);
